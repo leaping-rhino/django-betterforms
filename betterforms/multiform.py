@@ -157,7 +157,7 @@ class MultiForm(object):
         for key, value in data.items():
             child_form = self[key]
             if hasattr(child_form, 'forms'):
-                for formlet, formlet_data in zip(child_form.forms, value):
+                for formlet, formlet_data in zip(child_form.forms.values(), value):
                     formlet.cleaned_data = formlet_data
             else:
                 child_form.cleaned_data = value
