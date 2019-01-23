@@ -157,8 +157,13 @@ class MultiForm(object):
         for key, value in data.items():
             child_form = self[key]
             if hasattr(child_form, 'forms'):
-                for formlet, formlet_data in zip(child_form.forms.values(), value):
-                    formlet.cleaned_data = formlet_data
+                if not hasattr(value, 'get'):
+                    raise TypeError(
+                            'Expected a dictionary-like object to set '
+                            'cleaned_data for child forms.'
+                    )
+                for child_key, formlet in child_form.forms.items():
+                    formlet.cleaned_data = value.get(child_key)
             else:
                 child_form.cleaned_data = value
 
